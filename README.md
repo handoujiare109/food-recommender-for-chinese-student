@@ -1,93 +1,89 @@
-# 🍜 Food Recommender for Chinese Students / 中国留学生美食推荐系统
+# 🍜 美食推荐系统
 
-A food recommendation web application that uses **Thompson Sampling** (a Bayesian multi-armed bandit algorithm) to help Chinese students decide what to eat. It learns your preferences over time by balancing exploration (trying new dishes) and exploitation (recommending proven favorites).
-
-一款基于 **Thompson Sampling（汤普森采样）** 贝叶斯多臂老虎机算法的美食推荐 Web 应用。帮助中国留学生解决"今天吃什么"的终极难题，通过不断学习你的口味偏好，在探索新菜品和推荐已知喜好之间找到最佳平衡。
+基于 **Thompson Sampling（汤普森采样）** 贝叶斯多臂老虎机算法的美食推荐 Web 应用。通过不断学习你的口味偏好，在探索新菜品和推荐已知喜好之间找到最佳平衡，解决"今天吃什么"的终极难题。
 
 ---
 
-## 🧠 How It Works / 工作原理
+## 🧠 工作原理
 
-The system categorizes **27 popular Chinese food items** into four quadrants based on:
+系统将 **27 种常见美食** 按照两个维度分为四个象限：
 
-系统将 **27 种常见中餐** 按照以下两个维度分为四个象限：
-
-| | 🌶️ Not Spicy / 不辣 | 🔥 Spicy / 辣 |
+| | 🌶️ 不辣 | 🔥 辣 |
 |---|---|---|
-| **💰 Under ¥25 / 25元以下** | Quadrant 1 | Quadrant 2 |
-| **💎 ¥25 and above / 25元及以上** | Quadrant 3 | Quadrant 4 |
+| **💰 25元以下** | 第一象限 | 第二象限 |
+| **💎 25元及以上** | 第三象限 | 第四象限 |
 
-### Thompson Sampling Algorithm
+### Thompson Sampling 算法
 
-For each recommendation, the algorithm:
+每次推荐时，算法执行以下步骤：
 
-1. Computes a **Beta posterior distribution** for each food item in the selected quadrant
-2. Draws a random sample from each distribution
-3. Recommends the item with the highest sampled value
+1. 为所选象限内的每道菜品计算 **Beta 后验分布**
+2. 从每个分布中随机采样
+3. 推荐采样值最高的菜品
 
-This naturally balances:
-- **Exploration** — items with few observations have wide posteriors and can occasionally "win"
-- **Exploitation** — items with strong historical click-through rates are more likely to be recommended
+这种机制自然地实现了平衡：
+- **探索（Exploration）** — 交互次数少的菜品后验分布方差大，有机会被推荐，从而获得更多数据
+- **利用（Exploitation）** — 历史点击率高的菜品更有可能被推荐，确保推荐质量
 
-The prior for each item is set by domain knowledge (an initial weight `w1`), with a pseudo-count of `N0 = 20`, meaning real user feedback gradually overrides the prior after ~20 interactions.
+每道菜品的先验由领域知识设定（初始权重 `w1`），伪计数 `N0 = 20`，意味着真实用户反馈在大约 20 次交互后逐渐覆盖先验。
 
 ---
 
-## 🍚 Food Items / 菜品种类
+## 🍚 菜品种类
 
-| Name | Price | Spicy |
+| 名称 | 价格 | 辣度 |
 |---|---|---|
-| 兰州拉面 (Lanzhou Noodles) | < ¥25 | No |
-| 烤串+米饭 (Kebab + Rice) | < ¥25 | Yes |
-| 黄焖鸡米饭 (Braised Chicken Rice) | < ¥25 | No |
-| 麻辣烫 (Malatang) | < ¥25 | Yes |
-| 沙县小吃 (Shaxian Snacks) | < ¥25 | No |
-| 盖饭 (Rice Topped) | < ¥25 | No |
-| 煲仔饭 (Claypot Rice) | < ¥25 | Yes |
-| 干锅系列 (Dry Pot Series) | ≥ ¥25 | Yes |
-| 寿司 (Sushi) | ≥ ¥25 | No |
-| 披萨 (Pizza) | ≥ ¥25 | No |
-| 汉堡+薯条 (Burger + Fries) | ≥ ¥25 | No |
-| 牛排 (Steak) | ≥ ¥25 | No |
-| 川菜套餐 (Sichuan Set) | ≥ ¥25 | Yes |
-| 煎饼果子/卷饼 (Jianbing/Wrap) | < ¥25 | No |
-| 米线 (Rice Noodles) | < ¥25 | Yes |
-| 小碗菜 (Small Bowl Dishes) | < ¥25 | No |
-| 东北套餐 (Dongbei Set) | < ¥25 | No |
-| 烤盘饭 (Grilled Plate Rice) | < ¥25 | Yes |
-| 麻辣拌 (Mala Sauce Mix) | < ¥25 | Yes |
-| 鸡排饭 (Chicken Cutlet Rice) | ≥ ¥25 | No |
-| 麻辣香锅 (Spicy Hot Pot) | ≥ ¥25 | Yes |
-| 日式套餐 (Japanese Set) | ≥ ¥25 | No |
-| 韩式套餐 (Korean Set) | ≥ ¥25 | No |
-| 粤菜套餐 (Cantonese Set) | ≥ ¥25 | No |
-| 饺子/馄饨 (Dumplings/Wonton) | < ¥25 | No |
-| 减脂餐 (Diet Meal) | ≥ ¥25 | No |
-| 螺蛳粉 (Luosifen) | < ¥25 | Yes |
+| 兰州拉面 | < ¥25 | 不辣 |
+| 烤串+米饭 | < ¥25 | 辣 |
+| 黄焖鸡米饭 | < ¥25 | 不辣 |
+| 麻辣烫 | < ¥25 | 辣 |
+| 沙县小吃 | < ¥25 | 不辣 |
+| 盖饭 | < ¥25 | 不辣 |
+| 煲仔饭 | < ¥25 | 辣 |
+| 干锅系列 | ≥ ¥25 | 辣 |
+| 寿司 | ≥ ¥25 | 不辣 |
+| 披萨 | ≥ ¥25 | 不辣 |
+| 汉堡+薯条 | ≥ ¥25 | 不辣 |
+| 牛排 | ≥ ¥25 | 不辣 |
+| 川菜套餐 | ≥ ¥25 | 辣 |
+| 煎饼果子/卷饼 | < ¥25 | 不辣 |
+| 米线 | < ¥25 | 辣 |
+| 小碗菜 | < ¥25 | 不辣 |
+| 东北套餐 | < ¥25 | 不辣 |
+| 烤盘饭 | < ¥25 | 辣 |
+| 麻辣拌 | < ¥25 | 辣 |
+| 鸡排饭 | ≥ ¥25 | 不辣 |
+| 麻辣香锅 | ≥ ¥25 | 辣 |
+| 日式套餐 | ≥ ¥25 | 不辣 |
+| 韩式套餐 | ≥ ¥25 | 不辣 |
+| 粤菜套餐 | ≥ ¥25 | 不辣 |
+| 饺子/馄饨 | < ¥25 | 不辣 |
+| 减脂餐 | ≥ ¥25 | 不辣 |
+| 螺蛳粉 | < ¥25 | 辣 |
 
 ---
 
-## 🛠️ Tech Stack / 技术栈
+## 🛠️ 技术栈
 
-| Technology | Purpose |
+| 技术 | 用途 |
 |---|---|
-| **Node.js** (v18+) | JavaScript runtime |
-| **Express 5.x** | Web server framework |
-| **Vanilla JavaScript (ES6+)** | Frontend logic |
-| **HTML5 + CSS3** | User interface |
-| **JSON file** | Data persistence |
+| **Node.js** (v18+) | JavaScript 运行时 |
+| **Express 5.x** | Web 服务框架 |
+| **原生 JavaScript (ES6+)** | 前端逻辑 |
+| **HTML5 + CSS3** | 用户界面 |
+| **JSON 文件** | 数据持久化 |
 
-> 🧪 The entire Thompson Sampling engine (gamma sampling, beta sampling, posterior computation) is implemented **from scratch in vanilla JavaScript** — zero ML dependencies.
+> 🧪 整个 Thompson Sampling 引擎（Gamma 采样、Beta 采样、后验计算）均由原生 JavaScript 从零实现，零 ML 依赖。
 
 ---
 
-## 🚀 Getting Started / 快速开始
+## 🚀 快速开始
 
-### Prerequisites / 环境要求
+### 环境要求
 
-- **Node.js** v18 or later
+- **Node.js** v18 或更高版本
 
-### Installation / 安装
+### 安装
 
 ```bash
 git clone https://github.com/handoujiare109/food-recommender-for-chinese-student.git
@@ -95,36 +91,37 @@ cd food-recommender-for-chinese-student
 npm install
 ```
 
-### Run / 运行
+### 运行
 
 ```bash
 npm start
-# or
+# 或者
 node server.js
 ```
 
-The server starts at `http://localhost:3000`.
+服务启动后访问 `http://localhost:3000`。
 
-| Page | URL | Description |
+| 页面 | URL | 说明 |
 |---|---|---|
-| 🏠 Main App | `http://localhost:3000/` | Get food recommendations |
-| 📊 Admin Dashboard | `http://localhost:3000/admin` | View stats (localhost only) |
+| 🏠 主页面 | `http://localhost:3000/` | 获取美食推荐 |
+| 📊 管理后台 | `http://localhost:3000/admin` | 查看统计数据（仅限本机访问） |
 
 ---
 
-## 📡 API Endpoints
+## 📡 API 接口
 
 ### `GET /api/recommend`
 
-Get a food recommendation.
+获取美食推荐。
 
-**Query Parameters:**
-| Param | Type | Description |
+**查询参数：**
+
+| 参数 | 类型 | 说明 |
 |---|---|---|
-| `price` | `0` or `1` | `0` = under ¥25, `1` = ¥25 and above |
-| `spicy` | `0` or `1` | `0` = not spicy, `1` = spicy |
+| `price` | `0` 或 `1` | `0` = 25元以下，`1` = 25元及以上 |
+| `spicy` | `0` 或 `1` | `0` = 不辣，`1` = 辣 |
 
-**Response:**
+**返回示例：**
 ```json
 {
   "name": "兰州拉面",
@@ -136,9 +133,9 @@ Get a food recommendation.
 
 ### `POST /api/feedback`
 
-Submit feedback for a recommendation.
+提交推荐反馈。
 
-**Body (JSON):**
+**请求体 (JSON)：**
 ```json
 {
   "name": "兰州拉面",
@@ -148,37 +145,37 @@ Submit feedback for a recommendation.
 
 ### `GET /api/data`
 
-Get all product statistics (admin use).
+获取所有菜品统计数据（管理后台使用）。
 
 ---
 
-## 📁 Project Structure / 项目结构
+## 📁 项目结构
 
 ```
 food-recommender/
-├── server.js           # Express server + Thompson Sampling engine
-├── data.json           # Product weights & interaction stats (auto-created)
-├── package.json        # NPM metadata
-├── package-lock.json   # Locked dependencies
+├── server.js           # Express 服务 + Thompson Sampling 引擎
+├── data.json           # 菜品权重与交互统计数据（自动创建）
+├── package.json        # NPM 元数据
+├── package-lock.json   # 锁定依赖版本
 └── public/
-    ├── index.html      # Main recommendation UI
-    └── admin.html      # Admin statistics dashboard
+    ├── index.html      # 主推荐页面
+    └── admin.html      # 管理后台统计页面
 ```
 
 ---
 
-## 🎯 Features
+## 🎯 功能特性
 
-- ✅ **Thompson Sampling** — intelligent exploration vs. exploitation trade-off
-- ✅ **Bayesian priors** — domain-expert initial weights for cold start
-- ✅ **Real-time learning** — updates model immediately after each feedback
-- ✅ **Persistent storage** — all data saved to `data.json` (debounced writes)
-- ✅ **Admin dashboard** — real-time statistics with auto-refresh
-- ✅ **Zero ML dependencies** — sampling algorithms implemented from scratch
-- ✅ **LAN access** — accessible from other devices on the same network
+- ✅ **Thompson Sampling** — 智能探索与利用平衡
+- ✅ **贝叶斯先验** — 基于领域知识的初始权重，解决冷启动问题
+- ✅ **实时学习** — 每次反馈后立即更新模型
+- ✅ **持久化存储** — 所有数据保存至 `data.json`（防抖写入）
+- ✅ **管理后台** — 实时统计面板，自动刷新
+- ✅ **零 ML 依赖** — 采样算法从零手写实现
+- ✅ **局域网访问** — 支持同一网络下的其他设备访问
 
 ---
 
-## 📄 License
+## 📄 许可证
 
 MIT
