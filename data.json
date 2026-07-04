@@ -1,0 +1,218 @@
+[
+  {
+    "name": "兰州拉面",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.30375,
+    "shows": 46,
+    "clicks": 15
+  },
+  {
+    "name": "烤肉饭",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.2278125,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "卤肉饭",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.151875,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "沙县小吃",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.151875,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "炒饭",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.0759375,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "拌面",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.050625,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "馄饨",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.050625,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "水饺",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.050625,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "粥品",
+    "price": 0,
+    "spicy": 0,
+    "w1": 0.050625,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "麻辣烫",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.455625,
+    "shows": 12,
+    "clicks": 1
+  },
+  {
+    "name": "黄焖鸡米饭",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.405,
+    "shows": 26,
+    "clicks": 6
+  },
+  {
+    "name": "酸辣粉",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.23625,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "螺蛳粉",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.16875,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "重庆小面",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.135,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "桂林米粉",
+    "price": 0,
+    "spicy": 1,
+    "w1": 0.10125,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "粤菜简餐",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.3796875,
+    "shows": 18,
+    "clicks": 2
+  },
+  {
+    "name": "煲仔饭",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.2025,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "寿司",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.135,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "牛肉汉堡套餐",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.1125,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "米饭炒菜",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.10125,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "披萨",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.0675,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "炸鸡套餐",
+    "price": 1,
+    "spicy": 0,
+    "w1": 0.045,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "川菜套餐",
+    "price": 1,
+    "spicy": 1,
+    "w1": 0.253125,
+    "shows": 17,
+    "clicks": 4
+  },
+  {
+    "name": "酸菜鱼米饭",
+    "price": 1,
+    "spicy": 1,
+    "w1": 0.2025,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "湘菜小炒",
+    "price": 1,
+    "spicy": 1,
+    "w1": 0.151875,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "江西辣小炒",
+    "price": 1,
+    "spicy": 1,
+    "w1": 0.10125,
+    "shows": 0,
+    "clicks": 0
+  },
+  {
+    "name": "麻辣小龙虾",
+    "price": 1,
+    "spicy": 1,
+    "w1": 0.0675,
+    "shows": 0,
+    "clicks": 0
+  }
+]

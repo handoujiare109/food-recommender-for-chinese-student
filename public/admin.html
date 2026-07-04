@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>管理面板——美食推荐系统</title>
+    <style>
+        body { font-family: system-ui; background: #f5f7fb; padding: 30px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: #f3f4f6; }
+        h3 { margin-top: 30px; }
+    </style>
+</head>
+<body>
+<h1>📊 实时数据统计</h1>
+<p>先验强度 N0 = 20。真实数据越多，后验越取代冷启动权重。</p>
+<div id="stats"></div>
+<script>
+const N0 = 20;
+async function loadData() {
+    try {
+        const resp = await fetch('/api/data');
+        if (!resp.ok) throw new Error('无权限');
+        const products = await resp.json();
+        render(products);
+    } catch (e) {
+        document.getElementById('stats').innerHTML = '<p style="color:red;">无法加载数据，请确认您是在本机访问管理面板。</p>';
+    }
+}
+
+function render(products) {
+    const groups = [
+        { label: '25元以下 · 不辣', price: 0, spicy: 0 },
+        { label: '25元以下 · 辣', price: 0, spicy: 1 },
+        { label: '25元及以上 · 不辣', price: 1, spicy: 0 },
+        { label: '25元及以上 · 辣', price: 1, spicy: 1 }
+    ];
+    let html = '';
+    for (let g of groups) {
+        const prods = products.filter(p => p.price === g.price && p.spicy === g.spicy);
+        if (prods.length === 0) continue;
+        html += `<h3>${g.label}</h3><table><tr><th>产品</th><th>初始权重</th><th>展示</th><th>点击</th><th>实际点击率</th><th>后验期望</th></tr>`;
+        const totalW1 = prods.reduce((s,p)=>s+p.w1,0);
+        for (let p of prods) {
+            const priorProb = p.w1 / totalW1;
+            const alpha0 = N0 * priorProb;
+            const beta0 = N0 * (1 - priorProb);
+            const alpha = alpha0 + p.clicks;
+            const beta = beta0 + (p.shows - p.clicks);
+            const score = alpha / (alpha + beta);
+            const ctr = p.shows > 0 ? (p.clicks/p.shows*100).toFixed(1)+'%' : '无数据';
+            html += `<tr>
+                <td>${p.name}</td>
+                <td>${p.w1.toFixed(4)}</td>
+                <td>${p.shows}</td>
+                <td>${p.clicks}</td>
+                <td>${ctr}</td>
+                <td>${(score*100).toFixed(1)}%</td>
+            </tr>`;
+        }
+        html += '</table><br>';
+    }
+    document.getElementById('stats').innerHTML = html;
+}
+
+loadData();
+setInterval(loadData, 5000); // 每5秒刷新
+</script>
+</body>
+</html>

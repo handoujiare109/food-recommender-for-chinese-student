@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日美食推荐</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f5f7fb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+        h2 { margin-top: 0; color: #1f2937; }
+        .question-label {
+            font-weight: 600;
+            display: block;
+            margin: 20px 0 12px;
+            font-size: 16px;
+        }
+        .option-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .option-btn {
+            flex: 1;
+            padding: 14px 10px;
+            border-radius: 12px;
+            border: 2px solid #d1d5db;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            user-select: none;
+        }
+        .option-btn.selected {
+            border-color: #4f46e5;
+            background: #eef2ff;
+            color: #312e81;
+            font-weight: bold;
+        }
+        .option-btn:hover {
+            background: #f9fafb;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: #4f46e5;
+            color: white;
+            font-weight: bold;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .result-box {
+            background: #eef2ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            text-align: center;
+        }
+        .result-name {
+            font-size: 30px;
+            font-weight: bold;
+            color: #312e81;
+            margin: 10px 0;
+        }
+        .feedback-btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .btn-yes {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            flex: 1;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-no {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            flex: 1;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="question-card">
+    <h2>🍱 为您推荐今日美食</h2>
+    <p>请勾选以下选项，立刻获得专属推送</p>
+
+    <div class="question-label">1. 您希望这顿的价格？</div>
+    <div class="option-group" id="price-group">
+        <div class="option-btn" data-value="0">25元以下</div>
+        <div class="option-btn" data-value="1">25元及以上</div>
+    </div>
+
+    <div class="question-label">2. 您现在想吃辣吗？</div>
+    <div class="option-group" id="spicy-group">
+        <div class="option-btn" data-value="0">不吃辣</div>
+        <div class="option-btn" data-value="1">吃辣</div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" disabled>🎯 获取推荐</button>
+</div>
+
+<div id="result-card" class="card" style="display:none;">
+    <h2>✨ 推荐结果</h2>
+    <div class="result-box">
+        <div style="font-size:18px;color:#4b5563;">为您推送的是</div>
+        <div class="result-name" id="rec-name"></div>
+        <div style="color:#6b7280;" id="rec-info"></div>
+    </div>
+    <div class="feedback-btns">
+        <button class="btn-yes" onclick="sendFeedback(true)">👍 感兴趣 / 下单</button>
+        <button class="btn-no" onclick="sendFeedback(false)">👎 不感兴趣</button>
+    </div>
+    <p style="font-size:12px;color:#9ca3af;margin-top:12px;text-align:center;">
+        您的反馈将帮助系统越来越懂您
+    </p>
+</div>
+
+<script>
+// --- 按钮组交互 ---
+let selectedPrice = null;
+let selectedSpicy = null;
+
+function setupGroup(groupId, callback) {
+    const group = document.getElementById(groupId);
+    const buttons = group.querySelectorAll('.option-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            buttons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            callback(parseInt(btn.dataset.value));
+            checkSubmitReady();
+        });
+    });
+}
+
+function checkSubmitReady() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = !(selectedPrice !== null && selectedSpicy !== null);
+}
+
+setupGroup('price-group', (val) => { selectedPrice = val; });
+setupGroup('spicy-group', (val) => { selectedSpicy = val; });
+
+document.getElementById('submit-btn').addEventListener('click', getRecommendation);
+
+// --- 推荐逻辑 ---
+let currentProduct = null;
+
+async function getRecommendation() {
+    const resp = await fetch(`/api/recommend?price=${selectedPrice}&spicy=${selectedSpicy}`);
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    currentProduct = data.name;
+    document.getElementById('rec-name').textContent = data.name;
+    document.getElementById('rec-info').textContent =
+        `预估感兴趣概率：${(data.score*100).toFixed(1)}%  (展示${data.shows}次, 点击${data.clicks}次)`;
+    document.getElementById('result-card').style.display = 'block';
+}
+
+async function sendFeedback(interested) {
+    if (!currentProduct) return;
+    await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name: currentProduct, interested })
+    });
+    alert(interested ? '感谢反馈！我们会继续优化推荐。' : '感谢反馈！我们会改进推荐。');
+    document.getElementById('result-card').style.display = 'none';
+    currentProduct = null;
+}
+</script>
+
+</body>
+</html>
